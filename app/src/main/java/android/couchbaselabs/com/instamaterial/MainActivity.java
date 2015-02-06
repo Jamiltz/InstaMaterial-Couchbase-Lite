@@ -1,6 +1,7 @@
 package android.couchbaselabs.com.instamaterial;
 
 import android.content.Intent;
+import android.couchbaselabs.com.instamaterial.document.Post;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+
+import com.couchbase.lite.LiveQuery;
 
 public class MainActivity extends ActionBarActivity {
     Toolbar toolbar;
@@ -42,9 +45,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupFeed() {
+        LiveQuery query = Post.allPostsQuery(((Application) getApplication()).getDatabase()).toLiveQuery();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvFeed.setLayoutManager(linearLayoutManager);
-        feedAdapter = new FeedAdapter(this);
+        feedAdapter = new FeedAdapter(this, query);
         rvFeed.setAdapter(feedAdapter);
     }
 

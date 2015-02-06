@@ -19,11 +19,26 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int lastAnimatedPosition = -1;
 
     private Context context;
+    private LiveQuery query;
+    private QueryEnumerator enumerator;
 
-    public FeedAdapter(Context context) {
+    public FeedAdapter(Context context, LiveQuery query) {
         this.context = context;
+        this.query = query;
+        query.addChangeListener(new LiveQuery.ChangeListener() {
+            @Override
+            public void changed(final LiveQuery.ChangeEvent changeEvent) {
+                ((Activity) FeedAdapter.this.context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        enumerator = changeEvent.getRows();
+                        notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+        query.start();
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -51,7 +66,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         runEnterAnimation(viewHolder.itemView, position);
         CellFeedViewHolder holder = (CellFeedViewHolder) viewHolder;
-
+        final Document task = (Document) getItem(position);
+        holder.ivFeedUsername.setText((String) task.getProperty("username"));
+        holder.ivFeedStatus.setText((String) task.getProperty("status"));
         if (position % 2 == 0) {
             holder.ivFeedImage.setImageResource(R.drawable.img_feed_center_1);
         } else {
@@ -61,7 +78,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return enumerator != null ? enumerator.getCount() : 0;
+    }
+    
+    public Object getItem(int i) {
+        return enumerator != null ? enumerator.getRow(i).getDocument() : null;
     }
 
     public static class CellFeedViewHolder extends RecyclerView.ViewHolder {
