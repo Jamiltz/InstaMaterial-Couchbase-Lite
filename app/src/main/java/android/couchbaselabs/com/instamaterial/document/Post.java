@@ -17,7 +17,7 @@ public class Post {
     private static final String DOC_TYPE = "post";
     private static final String VIEW_NAME = "posts";
 
-    public static Document createTask(Database database, String username, String status) throws CouchbaseLiteException {
+    public static Document createPost(Database database, String username, String status) throws CouchbaseLiteException {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Calendar calendar = GregorianCalendar.getInstance();
         String currentTimeString = dateFormatter.format(calendar.getTime());

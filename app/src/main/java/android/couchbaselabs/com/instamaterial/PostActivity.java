@@ -41,7 +41,7 @@ public class PostActivity extends ActionBarActivity {
                 final EditText usernameField = (EditText) findViewById(R.id.username);
                 final EditText statusField = (EditText) findViewById(R.id.status);
                 try {
-                    Post.createTask(((Application) getApplication()).getDatabase(), usernameField.getText().toString(), statusField.getText().toString());
+                    Post.createPost(((Application) getApplication()).getDatabase(), usernameField.getText().toString(), statusField.getText().toString());
                 } catch (CouchbaseLiteException e) {
                     e.printStackTrace();
                 }
