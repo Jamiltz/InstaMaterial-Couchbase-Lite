@@ -1,6 +1,5 @@
 package android.couchbaselabs.com.instamaterial;
 
-import android.couchbaselabs.com.instamaterial.document.Post;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,13 +37,6 @@ public class PostActivity extends ActionBarActivity {
         saveMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                final EditText usernameField = (EditText) findViewById(R.id.username);
-                final EditText statusField = (EditText) findViewById(R.id.status);
-                try {
-                    Post.createPost(((Application) getApplication()).getDatabase(), usernameField.getText().toString(), statusField.getText().toString());
-                } catch (CouchbaseLiteException e) {
-                    e.printStackTrace();
-                }
                 finish();
                 return true;
             }
